@@ -1496,9 +1496,10 @@ footer {
 .wa-float:hover { transform: scale(1.12) translate(-2px,-2px); box-shadow: 5px 5px 0 var(--escuro); }
 @keyframes wapulse { 0%{transform:scale(1);opacity:1} 100%{transform:scale(1.7);opacity:0} }
 
-/* ── REVEAL ANIMATIONS ── */
-.reveal { opacity:1; transform:translateY(0); transition:opacity 0.7s ease,transform 0.7s ease; }
+/* ── REVEAL ANIMATIONS (corrigido: estado inicial oculto) ── */
+.reveal { opacity:0; transform:translateY(26px); transition:opacity 0.7s ease,transform 0.7s cubic-bezier(0.22,1,0.36,1); will-change:opacity,transform; }
 .reveal.visible { opacity:1; transform:translateY(0); }
+.no-js .reveal { opacity:1; transform:none; }
 @keyframes fadeUp { from{opacity:0;transform:translateY(22px)} to{opacity:1;transform:translateY(0)} }
 
 /* ── RESPONSIVE ── */
@@ -2077,6 +2078,72 @@ footer {
 }
 
 </style>
+<style id="upgrades-2026">
+/* ════════ UPGRADES: MOTION + CONVERSÃO (mantendo identidade cordel) ════════ */
+
+/* Badge "Aberto agora" — gatilho de disponibilidade */
+.status-badge{display:inline-flex;align-items:center;gap:0.45rem;margin-left:0.8rem;padding:0.25rem 0.7rem;font-family:'Playfair Display',serif;font-size:0.68rem;letter-spacing:0.12em;text-transform:uppercase;border:2px solid var(--verde);color:var(--verde);background:rgba(30,107,58,0.07);vertical-align:middle;}
+.status-badge.fechado{border-color:var(--terra);color:var(--terra);background:rgba(139,58,26,0.07);}
+.status-dot{width:8px;height:8px;border-radius:50%;background:currentColor;animation:statusPulse 1.6s ease-in-out infinite;}
+@keyframes statusPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.45;transform:scale(0.8)}}
+
+/* Faixa marquee estilo letreiro de feira */
+.marquee{overflow:hidden;background:var(--terra);border-top:3px solid var(--escuro);border-bottom:3px solid var(--escuro);padding:0.55rem 0;position:relative;}
+.marquee-track{display:flex;width:max-content;animation:marquee 26s linear infinite;}
+.marquee span{font-family:'Abril Fatface',cursive;font-size:0.95rem;letter-spacing:0.18em;color:var(--creme);white-space:nowrap;padding-right:2.2rem;}
+.marquee span em{color:var(--sol);font-style:normal;}
+@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.marquee:hover .marquee-track{animation-play-state:paused;}
+
+/* Cards dos especiais: lift + zoom de foto + sombra xilo */
+.card-especial{transition:transform 0.35s cubic-bezier(0.22,1,0.36,1),box-shadow 0.35s ease;}
+.card-especial:hover{transform:translateY(-8px) rotate(-0.4deg);box-shadow:8px 8px 0 rgba(44,21,6,0.22);}
+.card-especial .card-foto{transition:transform 0.6s cubic-bezier(0.22,1,0.36,1);}
+.card-especial:hover .card-foto{transform:scale(1.06);}
+.card-especial{overflow:hidden;}
+.card-especial:hover .card-cta{background:var(--laranja);color:#fff;}
+.card-cta{transition:background 0.25s,color 0.25s;}
+
+/* Itens do cardápio: micro-interação */
+.menu-item{transition:transform 0.22s ease,background 0.22s ease;}
+.menu-item:hover{transform:translateX(5px);}
+.menu-add-btn{transition:transform 0.2s cubic-bezier(0.34,1.56,0.64,1),background 0.2s,color 0.2s;}
+.menu-item:hover .menu-add-btn{transform:scale(1.15) rotate(90deg);}
+.menu-item.selected .menu-add-btn{transform:scale(1.05);}
+
+/* Pulso da barra de pedido ao adicionar item */
+@keyframes cartPop{0%{transform:translateY(0) scale(1)}35%{transform:translateY(-4px) scale(1.015)}100%{transform:translateY(0) scale(1)}}
+#cart-bar.pop{animation:cartPop 0.45s cubic-bezier(0.34,1.56,0.64,1);}
+.cart-count{transition:transform 0.2s;}
+.cart-count.bump{transform:scale(1.35);}
+
+/* Toast "adicionado ao pedido" */
+#toast-add{position:fixed;left:50%;bottom:7.5rem;transform:translate(-50%,16px);background:var(--escuro);color:var(--creme);font-family:'Playfair Display',serif;font-size:0.82rem;letter-spacing:0.08em;padding:0.65rem 1.3rem;border:2px solid var(--sol);box-shadow:4px 4px 0 rgba(44,21,6,0.35);opacity:0;pointer-events:none;transition:opacity 0.3s,transform 0.3s;z-index:950;max-width:90vw;text-align:center;}
+#toast-add.show{opacity:1;transform:translate(-50%,0);}
+#toast-add b{color:var(--sol);}
+
+/* Upsell dentro do modal/pedido */
+.upsell-box{margin-top:1.1rem;padding:0.9rem 1rem;border:2px dashed var(--sol);background:rgba(212,137,26,0.07);display:flex;align-items:center;justify-content:space-between;gap:0.8rem;flex-wrap:wrap;}
+.upsell-box p{font-family:'Playfair Display',serif;font-size:0.82rem;color:var(--escuro);margin:0;}
+.upsell-box p b{color:var(--laranja);}
+.upsell-btn{font-family:'Playfair Display',serif;font-weight:700;font-size:0.78rem;letter-spacing:0.08em;padding:0.45rem 1rem;background:var(--sol);color:var(--escuro);border:2px solid var(--escuro);cursor:pointer;transition:transform 0.2s,background 0.2s;}
+.upsell-btn:hover{background:var(--laranja);color:#fff;transform:translateY(-2px);}
+
+/* Selo de preço do hero: balanço sutil */
+@keyframes stickerSwing{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(3deg)}}
+.hero-price-sticker{animation:stickerSwing 4.5s ease-in-out infinite;transform-origin:top center;}
+
+/* Acessibilidade: foco visível e respeito a reduced motion */
+a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid var(--ceu);outline-offset:2px;}
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:0.01ms !important;animation-iteration-count:1 !important;transition-duration:0.01ms !important;scroll-behavior:auto !important;}
+  .reveal{opacity:1;transform:none;}
+}
+@media(max-width:600px){
+  .status-badge{margin-left:0;margin-top:0.5rem;}
+  #toast-add{bottom:9rem;}
+}
+</style>
 </head>
 <body>
 
@@ -2291,7 +2358,7 @@ footer {
 </svg>
 
   <div class="hero-left" style="opacity:0;animation:fadeUp 0.8s 0.2s forwards;">
-    <div class="hero-tag">Cafeteria & Gelatos · Feira de Santana</div>
+    <div class="hero-tag">Cafeteria & Gelatos · Feira de Santana <span class="status-badge" id="open-status" hidden><span class="status-dot"></span><span id="open-status-txt"></span></span></div>
     <h1 class="hero-title">
       A comida que<br>
       <span class="word-nordeste">faz saudade</span>
@@ -2340,6 +2407,13 @@ footer {
     </svg>
   </div>
 </section>
+
+<!-- FAIXA LETREIRO -->
+<div class="marquee" aria-hidden="true">
+  <div class="marquee-track" id="marquee-track">
+    <span>✦ FEITO NA HORA</span><span>✦ CUSCUZ RECHEADO</span><span>✦ TAPIOCA <em>DOCE & SALGADA</em></span><span>✦ AIPIM GOURMET</span><span>✦ GELATO ARTESANAL</span><span>✦ PEÇA PELO <em>WHATSAPP</em></span>
+  </div>
+</div>
 
 <!-- STATS STRIP -->
 <div class="stats-strip" id="stats-strip">
@@ -2836,6 +2910,9 @@ footer {
 <!-- BORDA PADRÃO GEOMÉTRICO RODAPÉ -->
 <div class="border-pattern"></div>
 
+<!-- TOAST -->
+<div id="toast-add" role="status" aria-live="polite"></div>
+
 <!-- CART BAR -->
 <div id="cart-bar">
   <div class="cart-info">
@@ -2871,12 +2948,67 @@ footer {
 </a>
 
 <script>
+  // ─────────────────────────────────────
+  //  UTILITÁRIOS (segurança + UX)
+  // ─────────────────────────────────────
+  // Sanitiza qualquer texto antes de inserir via innerHTML (anti-XSS)
+  function escapeHtml(str) {
+    return String(str ?? '').replace(/[&<>"']/g, c => ({
+      '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+    }[c]));
+  }
+  // Remove caracteres perigosos de nomes usados em atributos
+  function safeName(str) { return String(str ?? '').replace(/[<>"'`]/g, ''); }
+  // Garante que preços sejam apenas números
+  function safePrice(v) { return parseInt(String(v).replace(/[^\d]/g, ''), 10) || 0; }
+
+  // Toast "adicionado ao pedido"
+  let toastTimer = null;
+  function showToast(html) {
+    const t = document.getElementById('toast-add');
+    if (!t) return;
+    t.innerHTML = html;
+    t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
+  }
+
+  // Pulso visual da barra de pedido
+  function pulseCartBar() {
+    const bar = document.getElementById('cart-bar');
+    const count = document.getElementById('cart-count');
+    if (bar) { bar.classList.remove('pop'); void bar.offsetWidth; bar.classList.add('pop'); }
+    if (count) { count.classList.add('bump'); setTimeout(() => count.classList.remove('bump'), 250); }
+  }
+
+  // Badge "Aberto agora" — Seg–Sáb, 7h às 20h (ajuste aqui se mudar o horário)
+  (function openStatus() {
+    const el = document.getElementById('open-status');
+    const txt = document.getElementById('open-status-txt');
+    if (!el || !txt) return;
+    const now = new Date();
+    const day = now.getDay(); // 0 = domingo
+    const hour = now.getHours();
+    const aberto = day >= 1 && day <= 6 && hour >= 7 && hour < 20;
+    el.hidden = false;
+    if (aberto) { txt.textContent = 'Aberto agora'; }
+    else { el.classList.add('fechado'); txt.textContent = 'Abrimos Seg–Sáb · 7h'; }
+  })();
+
+  // Duplica o conteúdo do marquee para o loop ser contínuo
+  (function dupMarquee() {
+    const track = document.getElementById('marquee-track');
+    if (track) track.innerHTML += track.innerHTML;
+  })();
+
   // SCROLL + ADD FROM ESPECIAIS
   function scrollToAndAdd(cardEl, name, price) {
     const existing = cart.findIndex(i => i.name === name);
     if (existing === -1) {
       cart.push({ name, price });
       updateCartBar();
+      pulseCartBar();
+      showToast('<b>✓</b> ' + escapeHtml(name.split(' – ')[1] || name) + ' adicionado ao pedido!');
       const card = cardEl.closest('.card-especial');
       card.style.outline = '3px solid #D4891A';
       setTimeout(() => { card.style.outline = ''; }, 900);
@@ -2900,6 +3032,8 @@ footer {
       el.classList.add('selected');
       btn.textContent = '✓';
       btn.classList.add('added');
+      pulseCartBar();
+      showToast('<b>✓</b> ' + escapeHtml(name.split(' – ')[1] || name) + ' adicionado!');
     }
     updateCartBar();
   }
@@ -2945,16 +3079,30 @@ footer {
     const total = cart.reduce((a, i) => a + i.price, 0);
     const items = cart.map((i, idx) => `
       <div class="modal-item">
-        <div class="modal-item-name">${i.name}</div>
+        <div class="modal-item-name">${escapeHtml(i.name)}</div>
         <div style="display:flex;align-items:center;gap:0.8rem;">
-          <div class="modal-item-price">R$ ${i.price}</div>
+          <div class="modal-item-price">R$ ${safePrice(i.price)}</div>
           <button class="modal-item-remove" onclick="removeFromModal(${idx})">✕</button>
         </div>
       </div>`).join('');
+    // Upsell: se não houver doce no pedido, sugere a tapioca doce mais barata
+    let upsell = '';
+    const temDoce = cart.some(i => /doce|gelato/i.test(i.name));
+    if (!temDoce) {
+      const sug = buscarSugestaoDoce();
+      if (sug) {
+        upsell = `
+        <div class="upsell-box">
+          <p>🍓 Que tal fechar com um doce? <b>${escapeHtml(sug.name.split(' – ')[1] || sug.name)}</b> por só <b>R$ ${sug.price}</b></p>
+          <button class="upsell-btn" onclick="adicionarUpsell('${safeName(sug.name)}',${sug.price})">+ Adicionar</button>
+        </div>`;
+      }
+    }
     body.innerHTML = `
       <div class="modal-section-title">Itens do pedido (${cart.length})</div>
       ${items}
       <div class="modal-total"><span>Total</span><span>R$ ${total}</span></div>
+      ${upsell}
       <div class="modal-section-title" style="margin-top:1.2rem;">Observações</div>
       <textarea class="modal-obs" id="modal-obs" placeholder="Ex: sem cebola, endereço de entrega..."></textarea>
       <button class="modal-send" onclick="sendWhatsApp()">
@@ -2990,6 +3138,29 @@ footer {
 
   function closeModalOnOverlay(e) {
     if (e.target === document.getElementById('modal-overlay')) closeModal();
+  }
+
+  // ── UPSELL: busca a tapioca doce mais barata do cardápio atual ──
+  function buscarSugestaoDoce() {
+    const panel = document.getElementById('tab-tapioca-doce');
+    if (!panel) return null;
+    let melhor = null;
+    panel.querySelectorAll('.menu-item').forEach(el => {
+      const nome = el.querySelector('.menu-name')?.textContent?.trim();
+      const preco = safePrice(el.querySelector('.menu-price')?.textContent);
+      if (nome && preco > 0 && (!melhor || preco < melhor.price)) {
+        melhor = { name: 'Tapioca Doce – ' + nome, price: preco };
+      }
+    });
+    return melhor;
+  }
+  function adicionarUpsell(name, price) {
+    if (cart.findIndex(i => i.name === name) === -1) {
+      cart.push({ name, price: safePrice(price) });
+      updateCartBar();
+      pulseCartBar();
+    }
+    openModal();
   }
 
   function sendWhatsApp() {
@@ -3111,8 +3282,8 @@ footer {
         const nameInput = row.querySelector('.name-input');
         const priceInput = row.querySelector('.price-input');
         if (!nameInput || !priceInput) return;
-        const newName = nameInput.value.trim();
-        const newPrice = parseInt(priceInput.value) || 0;
+        const newName = safeName(nameInput.value.trim());
+        const newPrice = safePrice(priceInput.value);
         if (items[idx]) {
           const nameEl = items[idx].querySelector('.menu-name');
           const priceEl = items[idx].querySelector('.menu-price');
@@ -3188,12 +3359,12 @@ footer {
     if (titulo) document.querySelector('.promo-titulo').textContent = titulo;
     if (desc) document.querySelector('.promo-desc').textContent = desc;
     if (de) document.querySelector('.promo-de').textContent = de;
-    if (por) document.querySelector('.promo-por').innerHTML = '<sup>R$</sup>' + por;
+    if (por) document.querySelector('.promo-por').innerHTML = '<sup>R$</sup>' + safePrice(por);
     if (validade) document.querySelector('.promo-validade').textContent = validade;
 
     const tagsContainer = document.querySelector('.promo-tags');
     if (tagsContainer && tagsRaw.length) {
-      tagsContainer.innerHTML = tagsRaw.map(t => `<span class="promo-tag">${t}</span>`).join('');
+      tagsContainer.innerHTML = tagsRaw.map(t => `<span class="promo-tag">${escapeHtml(t)}</span>`).join('');
     }
     savePromoToStorage();
     showAdminToast('Promoção atualizada!');
@@ -3211,9 +3382,9 @@ footer {
       list.innerHTML += `
         <div style="margin-bottom:1rem;padding:0.8rem;background:rgba(255,255,255,0.04);border:1px solid rgba(212,137,26,0.12);">
           <div class="admin-promo-label" style="margin-top:0;">Card ${idx+1}</div>
-          <input class="admin-promo-input" style="margin-bottom:0.4rem;" placeholder="Título" id="esp-titulo-${idx}" value="${titulo.replace(/"/g,'&quot;')}">
-          <textarea class="admin-promo-textarea" placeholder="Descrição" id="esp-desc-${idx}" style="min-height:60px;margin-bottom:0.4rem;">${desc}</textarea>
-          <input class="admin-promo-input" placeholder="Preço (ex: R$ 22)" id="esp-price-${idx}" value="R$ ${price}">
+          <input class="admin-promo-input" style="margin-bottom:0.4rem;" placeholder="Título" id="esp-titulo-${idx}" value="${escapeHtml(titulo)}">
+          <textarea class="admin-promo-textarea" placeholder="Descrição" id="esp-desc-${idx}" style="min-height:60px;margin-bottom:0.4rem;">${escapeHtml(desc)}</textarea>
+          <input class="admin-promo-input" placeholder="Preço (ex: R$ 22)" id="esp-price-${idx}" value="R$ ${escapeHtml(price)}">
         </div>`;
     });
   }
@@ -3234,9 +3405,10 @@ footer {
     showAdminToast('Especiais atualizados!');
   }
 
-  // ADMIN AUTH
-  const ADMIN_USER = 'adm@nordestina';
-  const ADMIN_PASS = 'nordestina@2026!';
+  // ── ADMIN AUTH ──
+  // A senha NÃO fica mais no código. Ela é digitada pelo dono e validada
+  // no servidor (variável de ambiente ADMIN_SECRET na Vercel).
+  let adminToken = null;          // guardada só em memória, some ao fechar a aba
   let adminAutenticado = false;
 
   function showAdminLogin() {
@@ -3245,17 +3417,30 @@ footer {
     document.getElementById('admin-pass-input').value = '';
     document.getElementById('admin-login-error').classList.remove('show');
     document.getElementById('admin-login-overlay').classList.add('open');
-    setTimeout(() => document.getElementById('admin-login-input').focus(), 100);
+    setTimeout(() => document.getElementById('admin-pass-input').focus(), 100);
   }
 
   function closeAdminLogin() {
     document.getElementById('admin-login-overlay').classList.remove('open');
   }
 
-  function doAdminLogin() {
-    const user = document.getElementById('admin-login-input').value.trim();
+  async function doAdminLogin() {
     const pass = document.getElementById('admin-pass-input').value;
-    if (user === ADMIN_USER && pass === ADMIN_PASS) {
+    if (!pass) return;
+    let ok = false;
+    try {
+      const res = await fetch('/api/data', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + pass
+        },
+        body: JSON.stringify({ type: 'verify' })
+      });
+      ok = res.ok;
+    } catch { ok = false; }
+    if (ok) {
+      adminToken = pass;
       adminAutenticado = true;
       closeAdminLogin();
       toggleAdmin();
@@ -3330,8 +3515,8 @@ footer {
     cart.forEach(function(item,idx){
       itens += '<div class="pedido-item">' +
         '<span class="pedido-num">' + String(idx+1).padStart(2,'0') + '</span>' +
-        '<span class="pedido-nome">' + item.name + '</span>' +
-        '<span class="pedido-preco">R$ ' + item.price + '</span>' +
+        '<span class="pedido-nome">' + escapeHtml(item.name) + '</span>' +
+        '<span class="pedido-preco">R$ ' + safePrice(item.price) + '</span>' +
         '<button class="pedido-remover" onclick="cart.splice(' + idx + ',1);updateCartBar();renderPaginaPedido();">✕</button>' +
         '</div>';
     });
@@ -3396,15 +3581,17 @@ footer {
       if (!grid) return;
       grid.innerHTML = '';
       data[cat].forEach((item, idx) => {
+        const nome = safeName(item.name);
+        const preco = safePrice(item.price);
         const div = document.createElement('div');
         div.className = 'menu-item';
-        div.setAttribute('onclick', `toggleItem(this,'${CAT_LABEL[cat]} – ${item.name}',${item.price})`);
+        div.setAttribute('onclick', `toggleItem(this,'${CAT_LABEL[cat]} – ${nome}',${preco})`);
         div.innerHTML = `
           <div class="menu-item-left">
             <div class="menu-num">${String(idx+1).padStart(2,'0')}</div>
-            <div class="menu-name">${item.name}</div>
+            <div class="menu-name">${escapeHtml(nome)}</div>
           </div>
-          <div class="menu-price">R$ ${item.price}</div>
+          <div class="menu-price">R$ ${preco}</div>
           <button class="menu-add-btn">+</button>`;
         grid.appendChild(div);
       });
@@ -3415,11 +3602,11 @@ footer {
     if (d.titulo) document.querySelector('.promo-titulo').textContent = d.titulo;
     if (d.desc)   document.querySelector('.promo-desc').textContent   = d.desc;
     if (d.de)     document.querySelector('.promo-de').textContent     = d.de;
-    if (d.por)    document.querySelector('.promo-por').innerHTML      = '<sup>R$</sup>' + d.por;
+    if (d.por)    document.querySelector('.promo-por').innerHTML      = '<sup>R$</sup>' + safePrice(d.por);
     if (d.validade) document.querySelector('.promo-validade').textContent = d.validade;
     if (d.tags && d.tags.length) {
       const tagsContainer = document.querySelector('.promo-tags');
-      if (tagsContainer) tagsContainer.innerHTML = d.tags.map(t => `<span class="promo-tag">${t}</span>`).join('');
+      if (tagsContainer) tagsContainer.innerHTML = d.tags.map(t => `<span class="promo-tag">${escapeHtml(t)}</span>`).join('');
     }
   }
 
@@ -3474,17 +3661,19 @@ footer {
     return data;
   }
 
-  // ── Salvar na API ──
+  // ── Salvar na API (exige login do admin) ──
   async function saveToAPI(type, data) {
+    if (!adminToken) return false;
     try {
       const res = await fetch('/api/data', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + ADMIN_PASS
+          'Authorization': 'Bearer ' + adminToken
         },
         body: JSON.stringify({ type, data })
       });
+      if (!res.ok) showAdminToast('Erro ao salvar no servidor');
       return res.ok;
     } catch { return false; }
   }
@@ -3611,15 +3800,12 @@ footer {
 <div class="admin-login-overlay" id="admin-login-overlay">
   <div class="admin-login-box">
     <h3>Painel Admin</h3>
-    <div>
-      <label>Login</label>
-      <input type="text" id="admin-login-input" placeholder="seu@login" autocomplete="username">
-    </div>
+    <input type="hidden" id="admin-login-input" value="admin">
     <div>
       <label>Senha</label>
       <input type="password" id="admin-pass-input" placeholder="••••••••" autocomplete="current-password" onkeydown="if(event.key==='Enter')doAdminLogin()">
     </div>
-    <div class="admin-login-error" id="admin-login-error">Login ou senha incorretos.</div>
+    <div class="admin-login-error" id="admin-login-error">Senha incorreta.</div>
     <button class="admin-login-btn" onclick="doAdminLogin()">Entrar</button>
     <button class="admin-login-cancel" onclick="closeAdminLogin()">Cancelar</button>
   </div>
